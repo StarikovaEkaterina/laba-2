@@ -4,6 +4,9 @@
 """
 
 import re
+import unittest
+import sys
+import os
 
 
 def validate_time(time_str: str) -> bool:
@@ -101,7 +104,8 @@ def demo_mode():
     for time_str, should_be_valid in examples:
         is_valid = validate_time(time_str)
         status = "✅ ПРОШЛО" if is_valid == should_be_valid else "❌ ОШИБКА"
-        print(f"{time_str:15} → {'Корректно' if is_valid else 'Некорректно':15} [{status}]")
+        validity = "Корректно" if is_valid else "Некорректно"
+        print(f"{time_str:15} → {validity:15} [{status}]")
 
 
 def parse_file_for_times(filename: str) -> list:
@@ -172,22 +176,39 @@ def run_tests():
     print("=" * 40)
     
     try:
-        import unittest
-        import sys
+        # Импортируем тестовый класс напрямую
+        from test_time_regex import TestTimeRegex
         
-        # Загружаем и запускаем тесты
-        loader = unittest.TestLoader()
-        suite = loader.loadTestsFromName('test_time_regex')
-        runner = unittest.TextTestRunner(verbosity=2)
-        result = runner.run(suite)
+        # Создаем test suite
+        test_suite = unittest.TestLoader().loadTestsFromTestCase(TestTimeRegex)
+        
+        # Запускаем тесты
+        test_runner = unittest.TextTestRunner(verbosity=2)
+        result = test_runner.run(test_suite)
+        
+        # Выводим результаты
+        print("\n" + "=" * 40)
+        print("РЕЗУЛЬТАТЫ ТЕСТИРОВАНИЯ")
+        print("=" * 40)
+        print(f"Всего тестов: {result.testsRun}")
+        print(f"Провалено: {len(result.failures)}")
+        print(f"Ошибок: {len(result.errors)}")
         
         if result.wasSuccessful():
-            print("\n✅ Все тесты прошли успешно!")
+            print("✅ ВСЕ ТЕСТЫ ПРОЙДЕНЫ УСПЕШНО!")
         else:
-            print(f"\n❌ Тесты не прошли: {len(result.failures)} ошибок")
+            print("❌ НЕ ВСЕ ТЕСТЫ ПРОЙДЕНЫ")
             
-    except ImportError:
-        print("❌ Модуль unittest не найден. Используйте Python 3.x")
+        # Показываем детали ошибок, если есть
+        if result.failures:
+            print("\nДетали ошибок:")
+            for test, traceback in result.failures:
+                print(f"\n❌ {test}:")
+                print(traceback)
+                
+    except ImportError as e:
+        print(f"❌ Не удалось импортировать тесты: {e}")
+        print("Убедитесь, что файл test_time_regex.py находится в той же папке")
     except Exception as e:
         print(f"❌ Ошибка при запуске тестов: {e}")
 
