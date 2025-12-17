@@ -1,21 +1,8 @@
-"""
-Модуль для поиска времени в формате ЧЧ:ММ:СС в локальном файле.
-Простая версия (также эта функциональность есть в main.py).
-"""
 
 import re
 
 
 def parse_file_for_times(filename: str) -> list:
-    """
-    Читает файл и находит в нём все корректные времена.
-
-    Args:
-        filename (str): Имя файла для анализа.
-
-    Returns:
-        list: Список найденных времен в формате 'ЧЧ:ММ:СС'.
-    """
     try:
         with open(filename, 'r', encoding='utf-8') as file:
             content = file.read()
