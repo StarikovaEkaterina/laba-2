@@ -1,13 +1,10 @@
-"""
-Unit-тесты для проверки регулярного выражения времени ЧЧ:ММ:СС.
-"""
 
 import unittest
 import re
 
 
 class TestTimeRegex(unittest.TestCase):
-    """Тестовый класс для проверки функций времени."""
+    #Тестовый класс для проверки функций времени.
 
     def test_validate_time_correct(self):
         """Проверка корректных времен."""
@@ -31,7 +28,7 @@ class TestTimeRegex(unittest.TestCase):
                 )
 
     def test_validate_time_incorrect(self):
-        """Проверка некорректных времен."""
+        #Проверка некорректных времен.
         incorrect_times = [
             "24:00:00",      # час 24 недопустим
             "12:60:00",      # минута 60 недопустима
@@ -55,7 +52,7 @@ class TestTimeRegex(unittest.TestCase):
                 )
 
     def test_find_times_in_text_simple(self):
-        """Поиск времен в простом тексте."""
+        #Поиск времени в простом тексте
         from main import find_times_in_text
         text = "Встреча в 12:30:45 и 23:59:59."
         found = find_times_in_text(text)
@@ -63,7 +60,7 @@ class TestTimeRegex(unittest.TestCase):
         self.assertEqual(found, expected)
 
     def test_find_times_in_text_complex(self):
-        """Поиск времен в сложном тексте с некорректными данными."""
+        #Поиск времен в сложном тексте с некорректными данными
         from main import find_times_in_text
         text = """
         Расписание на день:
@@ -80,13 +77,13 @@ class TestTimeRegex(unittest.TestCase):
         self.assertEqual(sorted(found), sorted(expected))
 
     def test_no_times_in_text(self):
-        """Текст без времен."""
+        #Текст без времен.
         from main import find_times_in_text
         text = "Это текст без времени, только слова и знаки препинания."
         self.assertEqual(find_times_in_text(text), [])
 
     def test_boundary_values(self):
-        """Проверка граничных значений."""
+        #Проверка граничных значений.
         from main import validate_time
         # Граничные корректные значения
         self.assertTrue(validate_time("00:00:00"))
@@ -98,7 +95,7 @@ class TestTimeRegex(unittest.TestCase):
         self.assertFalse(validate_time("23:59:60"))
 
     def test_leading_zeros_optional(self):
-        """Проверка, что ведущие нули не обязательны."""
+        #Проверка, что ведущие нули не обязательны.
         from main import validate_time
         self.assertTrue(validate_time("01:01:01"))
         self.assertTrue(validate_time("1:1:1"))
@@ -108,7 +105,7 @@ class TestTimeRegex(unittest.TestCase):
 
 # Эта функция нужна для запуска тестов из main.py
 def run_tests():
-    """Запуск тестов и возврат результата."""
+    #Запуск тестов и возврат результата.
     loader = unittest.TestLoader()
     suite = loader.loadTestsFromTestCase(TestTimeRegex)
     runner = unittest.TextTestRunner(verbosity=2)
